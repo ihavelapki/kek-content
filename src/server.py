@@ -22,7 +22,7 @@ logger.debug(f'{logger_line} Created')
 
 
 if __name__ == '__main__':
-    # app.run(host='62.168.170.165')
+    # app.run(host='62.168.170.165', port='5000')
     logger.debug('Poehali')
     app.run(host='0.0.0.0')
 
