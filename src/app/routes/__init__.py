@@ -15,25 +15,38 @@ logger.debug(f'{logger_line} after created blueprint')
 @films_bp.route("/")
 def hello():
     logger.debug(f'{logger_line} Hello run')
-    n = 5
-    film_list = get_films(n)
-    # response = jsonify([{'id': 1, 'year': 2000, 'desc': 'Hello, I am from Russia', 'title': 'aaaa'}, {'id': 2, 'year': 2000, 'desc': 'balalana', 'title': 'aaaa'}])
-    response = jsonify(film_list)
+    resp = {'hello': 'world'}
+    response = jsonify(resp)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 
-# @films_bp.route('/films', methods=['GET', 'POST'])
-# def get_films():
-#
-#     if request.method == 'GET':
-#         password = request.args.get('pass').lower()
-#     elif request.method == 'POST':
-#         print('This is a POST')
-#     else:
-#         return {'err': 'err'}, 500
-#
-#     return {'First arg': 'value'}
+@films_bp.route('/films', methods=['GET'])
+def fetch_films():
+    logger.debug(f'{logger_line} fetch_films run')
+    if request.method == 'GET':
+        id = request.args.get('id')
+        count = request.args.get('count')
+    else:
+        logger.error(f'{logger_line} It\'s not GET request')
+        return {'err': 'err'}, 500
+
+    if id:
+        film = get_films(1)
+        response = jsonify(film)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+    elif count:
+        films = get_films(count)
+        response = jsonify(films)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+    else:
+        films = get_films(10)
+        response = jsonify(films)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
+    logger.debug(f'{logger_line} fetch_films end')
+
+    return response
 
 
 @films_bp.route("/getpass")
